@@ -264,6 +264,8 @@ jobs:
       - installawscli
       - installnodejs
       - installansible
+      - restore_cache:
+          keys: [backend-build]
       - add_ssh_keys:
           fingerprints:
             - "c7:ce:03:83:61:3d:0a:c4:3c:52:ba:1b:a9:5f:35:83"
