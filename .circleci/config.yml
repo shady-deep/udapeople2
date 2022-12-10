@@ -173,11 +173,9 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:14.18.2-buster-browsers-legacy
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
       - installawscli
       - installnodejs
       - run:
