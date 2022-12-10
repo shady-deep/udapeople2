@@ -307,9 +307,9 @@ jobs:
           name: save old cloudformation stack workflow id
           command: |
             export OLD_WORKFLOW_ID=$(aws cloudformation \
-                      list-exports --query "Expots[?Name==\`WorkflowID`].value" 
+                      list-exports --query "Exports[?Name==\`WorkflowID`].value" \
                       --no-paginate --output text)
-            echo "old_workflow_ID: $OLD_WORKFLOW_ID"
+            echo "Old_workflow_ID: $OLD_WORKFLOW_ID"
             curl https://kvdb.io/$(KVDB_BUCKET)/old_workflow_id -d "${OLD_Workflow_ID}"
       - run:
           name: update cloudfront distribution
