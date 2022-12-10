@@ -296,38 +296,30 @@ jobs:
              cd .circleci/ansible
              cat inventory.txt
              ansible-playbook -i inventory.txt deploy-backend.yml
-
-  smoke-test:
+  cloudfront-update:
     docker:
-      - image: cimg/node:14.20
+      - image : cimg/node:14.20
     steps:
       - checkout
       - installawscli
       - installnodejs
       - run:
-          name: Frontend smoke test.
+          name: save old cloudformation stack workflow id
           command: |
-            FRONTEND_WEBSITE=http://udapeople-9sszp1.s3-website-us-east-1.amazonaws.com
-            if curl -s $FRONTEND_WEBSITE | grep "welcome"
-            then  
-              exit 0
-            else
-              exit 1
-            fi
+            export OLD_WORKFLOW_ID=$(aws cloudformation \
+                      list-exports --query "Expots[?Name==\`WorkflowID`].value" 
+                      --no-paginate --output text)
+            echo "old_workflow_ID: $OLD_WORKFLOW_ID"
+            curl https://kvdb.io/$(KVDB_BUCKET)/old_workflow_id -d "${OLD_Workflow_ID}"
       - run:
-          name: backend smoke test .
+          name: update cloudfront distribution
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            export API_URL=http://${BACKEND_PUBLIC_IP}:3030
-            if curl -s $API_URL/api/status | grep "ok"
-            then 
-              exit 0
-            else
-              exit 1
-            fi
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name initialstack
+      - destroy-environment
+      - revert-migrations
 workflows:
   default:
     jobs:
