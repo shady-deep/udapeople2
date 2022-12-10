@@ -62,7 +62,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - installnodejs
@@ -79,7 +79,7 @@ jobs:
           key: frontend-build
   build-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -96,7 +96,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -110,7 +110,7 @@ jobs:
                 
   test-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -124,7 +124,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -140,7 +140,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -155,7 +155,7 @@ jobs:
              npm audit --audit-level=critical
   configure-infrastructure:
     docker: 
-      - image: cimg/base:stable
+      - image: cimg/node:14.20
     steps:
       - checkout
       - installansible
@@ -173,7 +173,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:14.18.2-buster-browsers-legacy
+      - image: cimg/node:14.20
     steps:
       - checkout
       - installawscli
@@ -196,7 +196,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -226,7 +226,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:14.20
     steps:
       - checkout
       - restore_cache:
@@ -256,7 +256,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:14.20
     steps:
       - checkout
       - installawscli
@@ -295,7 +295,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:14.20
     steps:
       - checkout
       - installawscli
