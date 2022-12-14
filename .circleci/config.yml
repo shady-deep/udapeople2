@@ -320,6 +320,27 @@ jobs:
               --stack-name distribution
       - destroy-environment
       - revert-migrations
+  cleanup:
+    docker:
+      - image: cimg/node:14.20
+    steps:
+      - checkout
+      - run:
+          name: Get old stack workflow id
+          command: |
+            export STACKS=($(aws cloudformation list-stacks \
+              --query "StackSummeries[*].Stackname" \
+              --stack-status-filter CREATE-COMPLETE --no-paginate --output text))
+            echo Stack-names: "${STACKS[@]}"
+
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/$(KVDB_BUCKET)/old_workflow_id)
+            echo Old Workflow ID: $OldWorkflowID
+
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}" 
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+            fi
 workflows:
   default:
     jobs:
