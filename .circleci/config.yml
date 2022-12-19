@@ -137,22 +137,6 @@ jobs:
              npm audit fix --force --audit-level=critical
              npm audit fix --force --audit-level=critical
              npm audit --audit-level=critical
-
-  scan-backend:
-    docker:
-      - image: cimg/node:14.20
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - run:
-          name: backend scan
-          command: |
-             cd backend
-             npm install
-             npm audit fix --force --audit-level=critical
-             npm audit fix --force --audit-level=critical
-             npm audit --audit-level=critical
   configure-infrastructure:
     docker: 
       - image: cimg/node:14.20
@@ -161,7 +145,7 @@ jobs:
       - installansible
       - add_ssh_keys:
           fingerprints:
-            - "c7:ce:03:83:61:3d:0a:c4:3c:52:ba:1b:a9:5f:35:83"
+            - "95:c9:9d:e6:94:0f:d4:b3:44:a3:ef:b0:c3:3c:df:bc"
       - attach_workspace:
           at: ~/
       - run:
@@ -268,7 +252,7 @@ jobs:
           keys: [backend-build]
       - add_ssh_keys:
           fingerprints:
-            - "c7:ce:03:83:61:3d:0a:c4:3c:52:ba:1b:a9:5f:35:83"
+            - "95:c9:9d:e6:94:0f:d4:b3:44:a3:ef:b0:c3:3c:df:bc"
       - attach_workspace:
           at: ~/
       - run:
