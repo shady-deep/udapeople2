@@ -351,5 +351,7 @@ workflows:
           requires: [run-migrations]
       - cloudfront-update:
           requires: [deploy-backend]
+      - cleanup:
+          requires: [deploy-infrastructure, configure-infrastructure, deploy-frontend, deploy-backend]
           
           
