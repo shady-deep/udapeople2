@@ -1,0 +1,5 @@
+https://github.com/shady-deep/udapeople2/tree/master  github account with udapeople2 project (I have another udapeople project which replaced by
+this because circleci cashe was cleared)
+
+http://udapeople-9sszp1.s3-website-us-east-1.amazonaws.com  (s3 static web hosting url)
+
