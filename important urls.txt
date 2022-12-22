@@ -1,5 +1,6 @@
-https://github.com/shady-deep/udapeople2/tree/master  github account with udapeople2 project (I have another udapeople project which replaced by
-this because circleci cashe was cleared)
+https://github.com/shady-deep/udapeople2/tree/master  (github repo)
+http://udapeople-q2w3ee3.s3-website-us-east-1.amazonaws.com  (s3 static web hosting url)
+https://d33fdr00rhfw62.cloudfront.net  (cloudfront distribution)
+100.26.34.23:9090 (ip of prometheus server)
 
-http://udapeople-9sszp1.s3-website-us-east-1.amazonaws.com  (s3 static web hosting url)
 
