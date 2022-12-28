@@ -199,10 +199,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
+            BACKEND_PUBLIC_IP="3.82.113.199"
             echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
@@ -227,10 +224,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
+            BACKEND_PUBLIC_IP="3.82.113.199"
             echo "API_URL=http://${BACKEND_PUBLIC_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
@@ -238,48 +232,48 @@ jobs:
           command: |
              cd frontend
              npm run build
-             aws s3 cp dist s3://udapeople-9sszp1 --recursive
+             aws s3 cp dist s3://udapeople-q2w3ee3 --recursive
 
-  deploy-backend:
-    docker:
-      - image: cimg/node:14.20
-    steps:
-      - checkout
-      - installawscli
-      - installnodejs
-      - installansible
-      - restore_cache:
-          keys: [backend-build]
-      - add_ssh_keys:
-          fingerprints:
-            - "95:c9:9d:e6:94:0f:d4:b3:44:a3:ef:b0:c3:3c:df:bc"
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            cd backend
-            npm install
-      - run:
-          name: backend packages
-          command: |
-             cd backend
-             npm run build
-             tar -czf artifact.tar.gz dist/* package*
-
-             cd .. 
-             cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
-
-      - run:
-          name: Deploy backend
-          command: |
-             export TYPEORM_MIGRATIONS_DIR=./migrations
-             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-             export TYPEORM_MIGRATIONS=./migrations/*.ts
-
-             cd .circleci/ansible
-             cat inventory.txt
-             ansible-playbook -i inventory.txt deploy-backend.yml
+  #deploy-backend:
+  #  docker:
+  #    - image: cimg/node:14.20
+  #  steps:
+  #    - checkout
+  #    - installawscli
+  #    - installnodejs
+  #    - installansible
+  #    - restore_cache:
+  #        keys: [backend-build]
+  #    - add_ssh_keys:
+  #        fingerprints:
+  #          - "95:c9:9d:e6:94:0f:d4:b3:44:a3:ef:b0:c3:3c:df:bc"
+  #    - attach_workspace:
+  #        at: ~/
+  #    - run:
+  #        name: Install dependencies
+  #        command: |
+  #          cd backend
+  #          npm install
+  #    - run:
+  #        name: backend packages
+  #        command: |
+  #           cd backend
+  #           npm run build
+  #           tar -czf artifact.tar.gz dist/* package*
+#
+  #           cd .. 
+  #           cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+#
+  #    - run:
+  #        name: Deploy backend
+  #        command: |
+  #           export TYPEORM_MIGRATIONS_DIR=./migrations
+  #           export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+  #           export TYPEORM_MIGRATIONS=./migrations/*.ts
+#
+  #           cd .circleci/ansible
+  #           cat inventory.txt
+  #           ansible-playbook -i inventory.txt deploy-backend.yml
 workflows:
   default:
     jobs:
@@ -302,7 +296,6 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
+
           
           
