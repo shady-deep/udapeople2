@@ -148,12 +148,12 @@ jobs:
             - "95:c9:9d:e6:94:0f:d4:b3:44:a3:ef:b0:c3:3c:df:bc"
       - attach_workspace:
           at: ~/
-      - run:
-          name: Configure server
-          command: |
-            cd .circleci/ansible
-            cat inventory.txt
-            ansible-playbook -i inventory.txt configure-server.yml 
+     # - run:
+      #    name: Configure server
+       #   command: |
+        #    cd .circleci/ansible
+         #   cat inventory.txt
+          #  ansible-playbook -i inventory.txt configure-server.yml 
 
   run-migrations:
     docker:
